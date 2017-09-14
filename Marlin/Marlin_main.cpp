@@ -99,6 +99,7 @@
  *        The '#' is necessary when calling from within sd files, as it stops buffer prereading
  * M33  - Get the longname version of a path. (Requires LONG_FILENAME_HOST_SUPPORT)
  * M34  - Set SD Card sorting options. (Requires SDCARD_SORT_ALPHA)
+ * M40  - BED CHANGE
  * M42  - Change pin status via gcode: M42 P<pin> S<value>. LED pin assumed if P is omitted.
  * M43  - Display pin status, watch pins for changes, watch endstops & toggle LED, Z servo probe test, toggle pins
  * M48  - Measure Z Probe repeatability: M48 P<points> X<pos> Y<pos> V<level> E<engage> L<legs>. (Requires Z_MIN_PROBE_REPEATABILITY_TEST)
@@ -1326,6 +1327,9 @@ bool get_target_extruder_from_command(const uint16_t code) {
       return true;
     }
     target_extruder = e;
+  }
+  else if (active_extruder == 2 || active_extruder == 3) {
+  	target_extruder = 0;
   }
   else
     target_extruder = active_extruder;
@@ -3941,12 +3945,6 @@ inline void gcode_G28(const bool always_home_all) {
     workspace_plane = PLANE_XY;
   #endif
 
-  // Always home with tool 0 active
-  #if HOTENDS > 1
-    const uint8_t old_tool_index = active_extruder;
-    tool_change(0, 0, true);
-  #endif
-
   #if ENABLED(DUAL_X_CARRIAGE) || ENABLED(DUAL_NOZZLE_DUPLICATION_MODE)
     extruder_duplication_enabled = false;
   #endif
@@ -4061,6 +4059,7 @@ inline void gcode_G28(const bool always_home_all) {
     // Home Z last if homing towards the bed
     #if Z_HOME_DIR < 0
       if (home_all || homeZ) {
+      	tool_change(2, 0, true);
         #if ENABLED(Z_SAFE_HOMING)
           home_z_safely();
         #else
@@ -4088,17 +4087,6 @@ inline void gcode_G28(const bool always_home_all) {
   #endif
 
   clean_up_after_endstop_or_probe_move();
-
-  // Restore the active tool after homing
-  #if HOTENDS > 1
-    tool_change(old_tool_index, 0,
-      #if ENABLED(PARKING_EXTRUDER)
-        false // fetch the previous toolhead
-      #else
-        true
-      #endif
-    );
-  #endif
 
   lcd_refresh();
 
