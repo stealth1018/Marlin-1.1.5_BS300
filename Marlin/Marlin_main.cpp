@@ -2157,7 +2157,7 @@ static void clean_up_after_endstop_or_probe_move() {
     if (endstops.z_probe_enabled == deploy) return false;
 
     // Make room for probe
-    do_probe_raise(_Z_CLEARANCE_DEPLOY_PROBE);
+    do_probe_raise(Z_CLEARANCE_BETWEEN_PROBES);
 
     #if ENABLED(Z_PROBE_SLED) || ENABLED(Z_PROBE_ALLEN_KEY)
       #if ENABLED(Z_PROBE_SLED)
@@ -3038,12 +3038,7 @@ static void homeaxis(const AxisEnum axis) {
   do_homing_move(axis, 1.5 * max_length(axis) * axis_home_dir);
 
   // When homing Z with probe respect probe clearance
-  const float bump = axis_home_dir * (
-    #if HOMING_Z_WITH_PROBE
-      (axis == Z_AXIS) ? max(Z_CLEARANCE_BETWEEN_PROBES, home_bump_mm(Z_AXIS)) :
-    #endif
-    home_bump_mm(axis)
-  );
+  const float bump = axis_home_dir * (home_bump_mm(axis));
 
   // If a second homing move is configured...
   if (bump) {
@@ -4412,6 +4407,7 @@ void home_all_axes() { gcode_G28(true); }
    *
    */
   inline void gcode_G29() {
+  	gcode_G28(false);
 
     // G29 Q is also available if debugging
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -5245,6 +5241,8 @@ void home_all_axes() { gcode_G28(true); }
 
     if (planner.abl_enabled)
       SYNC_PLAN_POSITION_KINEMATIC();
+
+    tool_change(3, 0, true);
   }
 
 #endif // HAS_ABL && !AUTO_BED_LEVELING_UBL
@@ -6583,6 +6581,70 @@ inline void gcode_M31() {
   }
 
 #endif // SDSUPPORT
+
+//BED CHANGE
+inline void gcode_M40() {
+	
+  stepper.synchronize();
+
+  int tr=0;
+  float travel=324;
+  float spu=400;
+  float step=8000;
+
+  pinMode(ABC_ENABLE_PIN,OUTPUT);
+  pinMode(ABC_STEP_PIN,OUTPUT);
+  pinMode(ABC_DIR_PIN,OUTPUT);
+
+  WRITE(ABC_ENABLE_PIN,LOW); 
+
+  WRITE(ABC_DIR_PIN,LOW);
+  while(READ(ABC_ENDSTOP)==LOW)
+  {
+    WRITE(ABC_STEP_PIN, HIGH);   
+    delayMicroseconds(50);               
+    WRITE(ABC_STEP_PIN, LOW);  
+    delayMicroseconds(50);            
+  }
+
+  if(READ(ABC_FRONT)) kill(PSTR("NO BED ERROR"));    
+
+	do_homing_move(Z_AXIS,350);
+
+  WRITE(ABC_DIR_PIN,HIGH);
+  for (float i = 0; i < travel*spu ; ++i)
+  {
+    WRITE(ABC_STEP_PIN, HIGH);   
+    delayMicroseconds(50);               
+    WRITE(ABC_STEP_PIN, LOW);  
+    delayMicroseconds(50);
+    if(READ(ABC_FRONT)) tr=1;    
+  }
+
+  if(tr==0) kill(PSTR("ABC JAM ERROR"));
+
+  WRITE(ABC_DIR_PIN,LOW);
+  while(READ(ABC_ENDSTOP)==LOW)
+  {
+    WRITE(ABC_STEP_PIN, HIGH);   
+    delayMicroseconds(50);               
+    WRITE(ABC_STEP_PIN, LOW);  
+    delayMicroseconds(50);            
+  }
+
+  WRITE(ABC_DIR_PIN,HIGH);
+  for (float i = 0; i < 1*spu ; ++i)
+  {
+    WRITE(ABC_STEP_PIN, HIGH);   
+    delayMicroseconds(50);               
+    WRITE(ABC_STEP_PIN, LOW);  
+    delayMicroseconds(50);
+  }
+
+  WRITE(ABC_ENABLE_PIN,HIGH);
+
+  do_blocking_move_to_z(current_position[Z_AXIS]-5);
+}
 
 /**
  * Sensitive pin test for M42, M226
@@ -8692,10 +8754,8 @@ inline void gcode_M211() {
 
     if (parser.seenval('X')) hotend_offset[X_AXIS][target_extruder] = parser.value_linear_units();
     if (parser.seenval('Y')) hotend_offset[Y_AXIS][target_extruder] = parser.value_linear_units();
+    if (parser.seenval('Z')) hotend_offset[Z_AXIS][target_extruder] = parser.value_linear_units();
 
-    #if ENABLED(DUAL_X_CARRIAGE) || ENABLED(SWITCHING_NOZZLE) || ENABLED(PARKING_EXTRUDER)
-      if (parser.seenval('Z')) hotend_offset[Z_AXIS][target_extruder] = parser.value_linear_units();
-    #endif
 
     SERIAL_ECHO_START();
     SERIAL_ECHOPGM(MSG_HOTEND_OFFSET);
@@ -8704,10 +8764,9 @@ inline void gcode_M211() {
       SERIAL_ECHO(hotend_offset[X_AXIS][e]);
       SERIAL_CHAR(',');
       SERIAL_ECHO(hotend_offset[Y_AXIS][e]);
-      #if ENABLED(DUAL_X_CARRIAGE) || ENABLED(SWITCHING_NOZZLE) || ENABLED(PARKING_EXTRUDER)
-        SERIAL_CHAR(',');
-        SERIAL_ECHO(hotend_offset[Z_AXIS][e]);
-      #endif
+      SERIAL_CHAR(',');
+      SERIAL_ECHO(hotend_offset[Z_AXIS][e]);
+
     }
     SERIAL_EOL();
   }
@@ -11009,6 +11068,9 @@ void process_next_command() {
 
       case 31: // M31: Report time since the start of SD print or last M109
         gcode_M31(); break;
+
+      case 40: // M40: bed change
+        gcode_M40(); break;
 
       case 42: // M42: Change pin state
         gcode_M42(); break;
