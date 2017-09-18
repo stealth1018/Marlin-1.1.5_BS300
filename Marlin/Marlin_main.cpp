@@ -4407,7 +4407,8 @@ void home_all_axes() { gcode_G28(true); }
    *
    */
   inline void gcode_G29() {
-  	gcode_G28(false);
+  	
+    gcode_G28(true);
 
     // G29 Q is also available if debugging
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -5923,6 +5924,7 @@ inline void gcode_G92() {
    * M0: Unconditional stop - Wait for user button press on LCD
    * M1: Conditional stop   - Wait for user button press on LCD
    */
+/*
   inline void gcode_M0_M1() {
     const char * const args = parser.string_arg;
 
@@ -5981,7 +5983,7 @@ inline void gcode_G92() {
     wait_for_user = false;
     KEEPALIVE_STATE(IN_HANDLER);
   }
-
+*/
 #endif // HAS_RESUME_CONTINUE
 
 #if ENABLED(SPINDLE_LASER_ENABLE)
@@ -10518,7 +10520,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     do_blocking_move_to_xy(current_position[X_AXIS],300);
     do_blocking_move_to_xy(89,current_position[Y_AXIS]);
     do_blocking_move_to_xy(current_position[X_AXIS],337);
-    do_blocking_move_to_xy(54,current_position[Y_AXIS]);
+    do_blocking_move_to_xy(53,current_position[Y_AXIS]);
     do_blocking_move_to_xy(current_position[X_AXIS],300); 
   }
   if(active_extruder == 1){
@@ -10526,7 +10528,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     do_blocking_move_to_xy(current_position[X_AXIS],300);
     do_blocking_move_to_xy(289,current_position[Y_AXIS]);
     do_blocking_move_to_xy(current_position[X_AXIS],337);
-    do_blocking_move_to_xy(254,current_position[Y_AXIS]);
+    do_blocking_move_to_xy(253,current_position[Y_AXIS]);
     do_blocking_move_to_xy(current_position[X_AXIS],300); 
   }
   if(active_extruder == 2){
@@ -10534,7 +10536,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     do_blocking_move_to_xy(current_position[X_AXIS],300);
     do_blocking_move_to_xy(189,current_position[Y_AXIS]);
     do_blocking_move_to_xy(current_position[X_AXIS],337);
-    do_blocking_move_to_xy(154,current_position[Y_AXIS]);
+    do_blocking_move_to_xy(153,current_position[Y_AXIS]);
     do_blocking_move_to_xy(current_position[X_AXIS],300); 
   } 
 
@@ -10550,47 +10552,50 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
   if(READ(MOUNT_DET_PROBE))
     kill(PSTR("TOOL CHANGE ERROR P-M"));
 
-  if(tmp_extruder == 0){
-    SERIAL_ECHOLNPGM("take t0");
-    do_blocking_move_to_xy(current_position[X_AXIS],300);
-    do_blocking_move_to_xy(55,current_position[Y_AXIS]);
-    do_blocking_move_to_xy(current_position[X_AXIS],337);
-    do_blocking_move_to_xy(89,current_position[Y_AXIS]);
-    do_blocking_move_to_xy(current_position[X_AXIS],300); 
-  }
-  if(tmp_extruder == 1){
-    SERIAL_ECHOLNPGM("take t1");
-    do_blocking_move_to_xy(current_position[X_AXIS],300);
-    do_blocking_move_to_xy(255,current_position[Y_AXIS]);
-    do_blocking_move_to_xy(current_position[X_AXIS],337);
-    do_blocking_move_to_xy(289,current_position[Y_AXIS]);
-    do_blocking_move_to_xy(current_position[X_AXIS],300); 
-  }
-  if(tmp_extruder == 2){
-    SERIAL_ECHOLNPGM("take probe");
-    do_blocking_move_to_xy(current_position[X_AXIS],300);
-    do_blocking_move_to_xy(155,current_position[Y_AXIS]);
-    do_blocking_move_to_xy(current_position[X_AXIS],337);
-    do_blocking_move_to_xy(189,current_position[Y_AXIS]);
-    do_blocking_move_to_xy(current_position[X_AXIS],300); 
-  }
-  if(tmp_extruder == 3){
-    SERIAL_ECHOLNPGM("parking all head");
-  }
+    if(tmp_extruder == 0){
+      SERIAL_ECHOLNPGM("take t0");
+      do_blocking_move_to_xy(current_position[X_AXIS],300);
+      do_blocking_move_to_xy(55,current_position[Y_AXIS]);
+      do_blocking_move_to_xy(current_position[X_AXIS],337);
+      do_blocking_move_to_xy(89,current_position[Y_AXIS]);
+      do_blocking_move_to_xy(current_position[X_AXIS],300); 
+    }
+    if(tmp_extruder == 1){
+      SERIAL_ECHOLNPGM("take t1");
+      do_blocking_move_to_xy(current_position[X_AXIS],300);
+      do_blocking_move_to_xy(255,current_position[Y_AXIS]);
+      do_blocking_move_to_xy(current_position[X_AXIS],337);
+      do_blocking_move_to_xy(289,current_position[Y_AXIS]);
+      do_blocking_move_to_xy(current_position[X_AXIS],300); 
+    }
+    if(tmp_extruder == 2){
+      SERIAL_ECHOLNPGM("take probe");
+      do_blocking_move_to_xy(current_position[X_AXIS],300);
+      do_blocking_move_to_xy(155,current_position[Y_AXIS]);
+      do_blocking_move_to_xy(current_position[X_AXIS],337);
+      do_blocking_move_to_xy(189,current_position[Y_AXIS]);
+      do_blocking_move_to_xy(current_position[X_AXIS],300); 
+    }
+    if(tmp_extruder == 3){
+      SERIAL_ECHOLNPGM("parking all head");
+    }
 
-  if(tmp_extruder == 0)
-  if(READ(HEAD_DET_T0))
-    kill(PSTR("TOOL CHANGE ERROR T0-H"));
+    if(tmp_extruder == 0)
+    if(READ(HEAD_DET_T0))
+      kill(PSTR("TOOL CHANGE ERROR T0-H"));
 
-  if(tmp_extruder == 1)
-  if(READ(HEAD_DET_T1))
-    kill(PSTR("TOOL CHANGE ERROR T1-H"));
+    if(tmp_extruder == 1)
+    if(READ(HEAD_DET_T1))
+      kill(PSTR("TOOL CHANGE ERROR T1-H"));
 
-  if(tmp_extruder == 2)
-  if(READ(HEAD_DET_PROBE))
-    kill(PSTR("TOOL CHANGE ERROR P-H"));
+    if(tmp_extruder == 2)
+    if(READ(HEAD_DET_PROBE))
+      kill(PSTR("TOOL CHANGE ERROR P-H"));
 
-  do_blocking_move_to_z(current_position[Z_AXIS]-2);
+    do_blocking_move_to_z(current_position[Z_AXIS]-2);
+
+
+
 
 //______________________________________________
           #if ENABLED(PARKING_EXTRUDER) // Dual Parking extruder
@@ -11090,7 +11095,7 @@ void process_next_command() {
       #if HAS_RESUME_CONTINUE
         case 0: // M0: Unconditional stop - Wait for user button press on LCD
         case 1: // M1: Conditional stop - Wait for user button press on LCD
-          gcode_M0_M1();
+          //gcode_M0_M1();
           break;
       #endif // ULTIPANEL
 
