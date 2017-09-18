@@ -918,6 +918,7 @@ void kill_screen(const char* lcd_msg) {
     #endif
 
     if (planner.movesplanned() || IS_SD_PRINTING) {
+      MENU_ITEM(submenu, "Live adjust Z Offset", lcd_babystep_zoffset);
       MENU_ITEM(submenu, MSG_TUNE, lcd_tune_menu);
     }
     else {
@@ -2921,6 +2922,74 @@ void kill_screen(const char* lcd_msg) {
    *
    */
 
+  void probe_set() {
+    if (lcd_clicked) {
+      enqueue_and_echo_commands_P(PSTR("G91 \n G1 Z3 \n G90"));    
+      (void)settings.save();
+      return lcd_goto_previous_menu(); 
+    }
+    defer_return_to_status = true;
+    ENCODER_DIRECTION_NORMAL();
+    if (encoderPosition) {
+      refresh_cmd_timeout();
+
+      // Limit to software endstops, if enabled
+      float min = Z_PROBE_OFFSET_RANGE_MIN,
+            max = Z_PROBE_OFFSET_RANGE_MAX;
+
+      // Get the new position
+      current_position[Z_AXIS] -= float((int32_t)encoderPosition) * 0.05;
+      zprobe_zoffset -= float((int32_t)encoderPosition) * 0.05;
+
+      // Limit only when trying to move towards the limit
+      if ((int32_t)encoderPosition < 0) NOLESS(zprobe_zoffset, min);
+      if ((int32_t)encoderPosition > 0) NOMORE(zprobe_zoffset, max);
+
+      manual_move_to_current(Z_AXIS);
+
+      encoderPosition = 0;
+      lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
+    }
+    if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Z Offset"), ftostr52sign(zprobe_zoffset));
+  }
+
+  void tool_offset_set() {
+    if (lcd_clicked) {
+      enqueue_and_echo_commands_P(PSTR("G91 \n G1 Z3 \n G90"));    
+      (void)settings.save();
+      return lcd_goto_previous_menu(); 
+    }
+    defer_return_to_status = true;
+    ENCODER_DIRECTION_NORMAL();
+    if (encoderPosition) {
+      refresh_cmd_timeout();
+
+      // Get the new position
+      current_position[Z_AXIS] -= float((int32_t)encoderPosition) * 0.05;
+      hotend_offset[Z_AXIS][1] += float((int32_t)encoderPosition) * 0.05;
+
+      manual_move_to_current(Z_AXIS);
+
+      encoderPosition = 0;
+      lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
+    }
+    if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("T1 Z offset"), ftostr52sign(hotend_offset[Z_AXIS][1]));
+  }
+
+  void offset_manager(){
+    START_SCREEN();
+    STATIC_ITEM("prepare..",false,false);
+    
+    enqueue_and_echo_commands_P(PSTR("M851 Z-13"));
+    enqueue_and_echo_commands_P(PSTR("M218 T1 Z-2"));
+    enqueue_and_echo_commands_P(PSTR("G28"));
+    enqueue_and_echo_commands_P(PSTR("T0"));
+    enqueue_and_echo_commands_P(PSTR("G1 X150 Y150 Z0"));
+    stepper.synchronize();
+    probe_set();
+  }
+
+
   #if HAS_LCD_CONTRAST
     void lcd_callback_set_contrast() { set_lcd_contrast(lcd_contrast); }
   #endif
@@ -2932,7 +3001,10 @@ void kill_screen(const char* lcd_msg) {
 
   void lcd_control_menu() {
     START_MENU();
-    MENU_BACK(MSG_MAIN);
+    MENU_BACK(MSG_MAIN);    
+    MENU_ITEM(function, "Z Offset manager", offset_manager);
+    MENU_ITEM(submenu, "adjust Z Offset", probe_set);
+    MENU_ITEM(submenu, "adjust T1 Z Offset", tool_offset_set);
     MENU_ITEM(submenu, MSG_TEMPERATURE, lcd_control_temperature_menu);
     MENU_ITEM(submenu, MSG_MOTION, lcd_control_motion_menu);
     MENU_ITEM(submenu, MSG_FILAMENT, lcd_control_filament_menu);
