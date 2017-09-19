@@ -60,9 +60,15 @@
 // Red   LED0
 // Green LED1
 // Blue  LED2
+/*
 #define PCA9632_RED     0x00
 #define PCA9632_GRN     0x02
 #define PCA9632_BLU     0x04
+*/
+
+#define PCA9632_RED     0x04
+#define PCA9632_GRN     0x02
+#define PCA9632_BLU     0x00
 
 #define LED_OFF   0x00
 #define LED_ON    0x01
