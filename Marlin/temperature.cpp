@@ -30,6 +30,7 @@
 #include "ultralcd.h"
 #include "planner.h"
 #include "language.h"
+#include "configuration_store.h"
 
 #if ENABLED(HEATER_0_USES_MAX6675)
   #include "spi.h"
@@ -246,10 +247,12 @@ uint8_t Temperature::soft_pwm_amount[HOTENDS],
         #endif
     ) {
       SERIAL_ECHOLN(MSG_PID_BAD_EXTRUDER_NUM);
+
       return;
     }
 
     SERIAL_ECHOLN(MSG_PID_AUTOTUNE_START);
+    LCD_MESSAGEPGM(MSG_PID_AUTOTUNE_START);
 
     disable_all_heaters(); // switch off all heaters.
 
@@ -384,6 +387,7 @@ uint8_t Temperature::soft_pwm_amount[HOTENDS],
       #define MAX_OVERSHOOT_PID_AUTOTUNE 20
       if (input > temp + MAX_OVERSHOOT_PID_AUTOTUNE) {
         SERIAL_PROTOCOLLNPGM(MSG_PID_TEMP_TOO_HIGH);
+        LCD_MESSAGEPGM(MSG_PID_TEMP_TOO_HIGH);
         return;
       }
       // Every 2 seconds...
@@ -391,6 +395,7 @@ uint8_t Temperature::soft_pwm_amount[HOTENDS],
         #if HAS_TEMP_HOTEND || HAS_TEMP_BED
           print_heaterstates();
           SERIAL_EOL();
+          LCD_MESSAGEPGM("Running PID Autotune....");
         #endif
 
         temp_ms = ms;
@@ -398,10 +403,12 @@ uint8_t Temperature::soft_pwm_amount[HOTENDS],
       // Over 2 minutes?
       if (((ms - t1) + (ms - t2)) > (10L * 60L * 1000L * 2L)) {
         SERIAL_PROTOCOLLNPGM(MSG_PID_TIMEOUT);
+        LCD_MESSAGEPGM(MSG_PID_TIMEOUT);
         return;
       }
       if (cycles > ncycles) {
         SERIAL_PROTOCOLLNPGM(MSG_PID_AUTOTUNE_FINISHED);
+        LCD_MESSAGEPGM(MSG_PID_AUTOTUNE_FINISHED);
 
         #if HAS_PID_FOR_BOTH
           const char* estring = hotend < 0 ? "bed" : "";
@@ -442,6 +449,7 @@ uint8_t Temperature::soft_pwm_amount[HOTENDS],
           #else
             _SET_BED_PID();
           #endif
+        (void)settings.save();
         }
         return;
       }
