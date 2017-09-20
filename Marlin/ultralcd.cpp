@@ -1000,7 +1000,10 @@ void kill_screen(const char* lcd_msg) {
     #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
 
       void lcd_babystep_zoffset() {
-        if (lcd_clicked) { return lcd_goto_previous_menu_no_defer(); }
+        if (lcd_clicked) { 
+          (void)settings.save();
+          return lcd_goto_previous_menu_no_defer(); 
+        }
         defer_return_to_status = true;
         ENCODER_DIRECTION_NORMAL();
         if (encoderPosition) {
@@ -1234,6 +1237,7 @@ void kill_screen(const char* lcd_msg) {
     // Babystep Y:
     // Babystep Z:
     //
+    /*
     #if ENABLED(BABYSTEPPING)
       #if ENABLED(BABYSTEP_XY)
         MENU_ITEM(submenu, MSG_BABYSTEP_X, lcd_babystep_x);
@@ -1245,7 +1249,7 @@ void kill_screen(const char* lcd_msg) {
         MENU_ITEM(submenu, MSG_BABYSTEP_Z, lcd_babystep_z);
       #endif
     #endif
-
+    */
     //
     // Change filament
     //
@@ -1424,40 +1428,40 @@ void kill_screen(const char* lcd_msg) {
       #if HOTENDS == 1
         #if TEMP_SENSOR_BED != 0
           MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0);
-          MENU_ITEM(function, MSG_PREHEAT_1_END, lcd_preheat_m1_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_1_END, lcd_preheat_m1_e0_only);
         #else
-          MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
         #endif
       #else
         #if TEMP_SENSOR_BED != 0
           MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H1, lcd_preheat_m1_e0);
-          MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E1, lcd_preheat_m1_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E1, lcd_preheat_m1_e0_only);
           MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H2, lcd_preheat_m1_e1);
-          MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E2, lcd_preheat_m1_e1_only);
+//          MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E2, lcd_preheat_m1_e1_only);
         #else
-          MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H1, lcd_preheat_m1_e0_only);
-          MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H2, lcd_preheat_m1_e1_only);
+//          MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H1, lcd_preheat_m1_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H2, lcd_preheat_m1_e1_only);
         #endif
         #if HOTENDS > 2
           #if TEMP_SENSOR_BED != 0
             MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H3, lcd_preheat_m1_e2);
-            MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E3, lcd_preheat_m1_e2_only);
+//            MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E3, lcd_preheat_m1_e2_only);
           #else
-            MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H3, lcd_preheat_m1_e2_only);
+//            MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H3, lcd_preheat_m1_e2_only);
           #endif
           #if HOTENDS > 3
             #if TEMP_SENSOR_BED != 0
               MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H4, lcd_preheat_m1_e3);
-              MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E4, lcd_preheat_m1_e3_only);
+//              MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E4, lcd_preheat_m1_e3_only);
             #else
-              MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H4, lcd_preheat_m1_e3_only);
+//              MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H4, lcd_preheat_m1_e3_only);
             #endif
             #if HOTENDS > 4
               #if TEMP_SENSOR_BED != 0
                 MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H5, lcd_preheat_m1_e4);
-                MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E5, lcd_preheat_m1_e4_only);
+//                MENU_ITEM(function, MSG_PREHEAT_1_END " " MSG_E5, lcd_preheat_m1_e4_only);
               #else
-                MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H5, lcd_preheat_m1_e4_only);
+//                MENU_ITEM(function, MSG_PREHEAT_1_N MSG_H5, lcd_preheat_m1_e4_only);
               #endif
             #endif // HOTENDS > 4
           #endif // HOTENDS > 3
@@ -1476,40 +1480,40 @@ void kill_screen(const char* lcd_msg) {
       #if HOTENDS == 1
         #if TEMP_SENSOR_BED != 0
           MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0);
-          MENU_ITEM(function, MSG_PREHEAT_2_END, lcd_preheat_m2_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_2_END, lcd_preheat_m2_e0_only);
         #else
-          MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
         #endif
       #else
         #if TEMP_SENSOR_BED != 0
           MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H1, lcd_preheat_m2_e0);
-          MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E1, lcd_preheat_m2_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E1, lcd_preheat_m2_e0_only);
           MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H2, lcd_preheat_m2_e1);
-          MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E2, lcd_preheat_m2_e1_only);
+//          MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E2, lcd_preheat_m2_e1_only);
         #else
-          MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H1, lcd_preheat_m2_e0_only);
-          MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H2, lcd_preheat_m2_e1_only);
+//          MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H1, lcd_preheat_m2_e0_only);
+//          MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H2, lcd_preheat_m2_e1_only);
         #endif
         #if HOTENDS > 2
           #if TEMP_SENSOR_BED != 0
             MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H3, lcd_preheat_m2_e2);
-            MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E3, lcd_preheat_m2_e2_only);
+//            MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E3, lcd_preheat_m2_e2_only);
           #else
-            MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H3, lcd_preheat_m2_e2_only);
+//            MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H3, lcd_preheat_m2_e2_only);
           #endif
           #if HOTENDS > 3
             #if TEMP_SENSOR_BED != 0
               MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H4, lcd_preheat_m2_e3);
-              MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E4, lcd_preheat_m2_e3_only);
+//              MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E4, lcd_preheat_m2_e3_only);
             #else
-              MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H4, lcd_preheat_m2_e3_only);
+//              MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H4, lcd_preheat_m2_e3_only);
             #endif
             #if HOTENDS > 4
               #if TEMP_SENSOR_BED != 0
                 MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H5, lcd_preheat_m2_e4);
-                MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E5, lcd_preheat_m2_e4_only);
+//                MENU_ITEM(function, MSG_PREHEAT_2_END " " MSG_E5, lcd_preheat_m2_e4_only);
               #else
-                MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H5, lcd_preheat_m2_e4_only);
+//                MENU_ITEM(function, MSG_PREHEAT_2_N MSG_H5, lcd_preheat_m2_e4_only);
               #endif
             #endif // HOTENDS > 4
           #endif // HOTENDS > 3
@@ -2434,65 +2438,6 @@ void kill_screen(const char* lcd_msg) {
     //
     MENU_BACK(MSG_MAIN);
 
-    //
-    // Move Axis
-    //
-    #if ENABLED(DELTA)
-      if (axis_homed[Z_AXIS])
-    #endif
-        MENU_ITEM(submenu, MSG_MOVE_AXIS, lcd_move_menu);
-
-    //
-    // Auto Home
-    //
-    MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28"));
-    #if ENABLED(INDIVIDUAL_AXIS_HOMING_MENU)
-      MENU_ITEM(gcode, MSG_AUTO_HOME_X, PSTR("G28 X"));
-      MENU_ITEM(gcode, MSG_AUTO_HOME_Y, PSTR("G28 Y"));
-      MENU_ITEM(gcode, MSG_AUTO_HOME_Z, PSTR("G28 Z"));
-    #endif
-
-    //
-    // Level Bed
-    //
-    #if ENABLED(AUTO_BED_LEVELING_UBL)
-      MENU_ITEM(submenu, MSG_UBL_LEVEL_BED, _lcd_ubl_level_bed);
-    #elif ENABLED(LCD_BED_LEVELING)
-      #if ENABLED(PROBE_MANUALLY)
-        if (!g29_in_progress)
-      #endif
-      MENU_ITEM(submenu, MSG_BED_LEVELING, lcd_bed_leveling);
-    #else
-      #if PLANNER_LEVELING
-        MENU_ITEM(gcode, MSG_BED_LEVELING, PSTR("G28\nG29"));
-      #endif
-      #if ENABLED(LEVEL_BED_CORNERS)
-        if (axis_homed[X_AXIS] && axis_homed[Y_AXIS] && axis_homed[Z_AXIS])
-          MENU_ITEM(function, MSG_LEVEL_CORNERS, _lcd_level_bed_corners);
-      #endif
-    #endif
-
-    #if HAS_M206_COMMAND
-      //
-      // Set Home Offsets
-      //
-      MENU_ITEM(function, MSG_SET_HOME_OFFSETS, lcd_set_home_offsets);
-      //MENU_ITEM(gcode, MSG_SET_ORIGIN, PSTR("G92 X0 Y0 Z0"));
-    #endif
-
-    //
-    // Disable Steppers
-    //
-    MENU_ITEM(gcode, MSG_DISABLE_STEPPERS, PSTR("M84"));
-
-    //
-    // Change filament
-    //
-    #if ENABLED(ADVANCED_PAUSE_FEATURE)
-      if (!thermalManager.tooColdToExtrude(active_extruder) && !IS_SD_FILE_OPEN)
-        MENU_ITEM(function, MSG_FILAMENTCHANGE, lcd_enqueue_filament_change);
-    #endif
-
     #if TEMP_SENSOR_0 != 0
 
       //
@@ -2512,11 +2457,75 @@ void kill_screen(const char* lcd_msg) {
         MENU_ITEM(submenu, MSG_PREHEAT_1, lcd_preheat_m1_menu);
         MENU_ITEM(submenu, MSG_PREHEAT_2, lcd_preheat_m2_menu);
       #else
-        MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
-        MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
+//        MENU_ITEM(function, MSG_PREHEAT_1, lcd_preheat_m1_e0_only);
+//        MENU_ITEM(function, MSG_PREHEAT_2, lcd_preheat_m2_e0_only);
       #endif
 
     #endif // TEMP_SENSOR_0 != 0
+
+    //
+    // Tool Change
+    //
+    MENU_ITEM(gcode, "Tool Change T0", PSTR("T0"));
+    MENU_ITEM(gcode, "Tool Change T1", PSTR("T1"));
+    MENU_ITEM(gcode, "Parking All Head", PSTR("T3"));
+
+    //
+    // Change filament
+    //
+    #if ENABLED(ADVANCED_PAUSE_FEATURE)
+      //if (!thermalManager.tooColdToExtrude(active_extruder) && !IS_SD_FILE_OPEN)
+        MENU_ITEM(function, MSG_FILAMENTCHANGE, lcd_enqueue_filament_change);
+    #endif
+
+    //
+    // Disable Steppers
+    //
+    MENU_ITEM(gcode, MSG_DISABLE_STEPPERS, PSTR("M84"));
+
+    //
+    // Auto Home
+    //
+    //MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28"));
+    #if ENABLED(INDIVIDUAL_AXIS_HOMING_MENU)
+      MENU_ITEM(gcode, MSG_AUTO_HOME_X, PSTR("G28 X"));
+      MENU_ITEM(gcode, MSG_AUTO_HOME_Y, PSTR("G28 Y"));
+      MENU_ITEM(gcode, MSG_AUTO_HOME_Z, PSTR("G28 Z"));
+    #endif
+
+    //
+    // Level Bed
+    //
+    #if ENABLED(AUTO_BED_LEVELING_UBL)
+      MENU_ITEM(submenu, MSG_UBL_LEVEL_BED, _lcd_ubl_level_bed);
+    #elif ENABLED(LCD_BED_LEVELING)
+      #if ENABLED(PROBE_MANUALLY)
+        if (!g29_in_progress)
+      #endif
+      MENU_ITEM(submenu, MSG_BED_LEVELING, lcd_bed_leveling);
+    #else
+      #if PLANNER_LEVELING
+        MENU_ITEM(gcode, MSG_BED_LEVELING, PSTR("G29"));
+      #endif
+      #if ENABLED(LEVEL_BED_CORNERS)
+        if (axis_homed[X_AXIS] && axis_homed[Y_AXIS] && axis_homed[Z_AXIS])
+          MENU_ITEM(function, MSG_LEVEL_CORNERS, _lcd_level_bed_corners);
+      #endif
+    #endif
+
+    #if HAS_M206_COMMAND
+      //
+      // Set Home Offsets
+      //
+      //MENU_ITEM(function, MSG_SET_HOME_OFFSETS, lcd_set_home_offsets);
+      //MENU_ITEM(gcode, MSG_SET_ORIGIN, PSTR("G92 X0 Y0 Z0"));
+    #endif
+
+    //
+    // Bed Change
+    //
+    MENU_ITEM(gcode, "BED Change", PSTR("M40"));
+    MENU_ITEM(gcode, "To Z MAX", PSTR("G1 Z350"));
 
     //
     // BLTouch Self-Test and Reset
@@ -2550,6 +2559,14 @@ void kill_screen(const char* lcd_msg) {
     #if ENABLED(DELTA_CALIBRATION_MENU)
       MENU_ITEM(submenu, MSG_DELTA_CALIBRATE, lcd_delta_calibrate_menu);
     #endif
+
+    //
+    // Move Axis
+    //
+    #if ENABLED(DELTA)
+      if (axis_homed[Z_AXIS])
+    #endif
+        MENU_ITEM(submenu, MSG_MOVE_AXIS, lcd_move_menu);
 
     END_MENU();
   }
@@ -2891,13 +2908,6 @@ void kill_screen(const char* lcd_msg) {
     else
       MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28"));
 
-    #if ENABLED(SWITCHING_EXTRUDER)
-      if (active_extruder)
-        MENU_ITEM(gcode, MSG_SELECT " " MSG_E1, PSTR("T0"));
-      else
-        MENU_ITEM(gcode, MSG_SELECT " " MSG_E2, PSTR("T1"));
-    #endif
-
     MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_get_e_amount);
     #if E_MANUAL > 1
       MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E1, lcd_move_get_e0_amount);
@@ -2921,73 +2931,107 @@ void kill_screen(const char* lcd_msg) {
    * "Control" submenu
    *
    */
-
-  void probe_set() {
-    if (lcd_clicked) {
-      enqueue_and_echo_commands_P(PSTR("G91 \n G1 Z3 \n G90"));    
-      (void)settings.save();
-      return lcd_goto_previous_menu(); 
+    void lcd_offset_park() {
+      if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Tool Parking"), NULL);
+      lcdDrawUpdate = LCDVIEW_CALL_NO_REDRAW;
+      if(!READ(MOUNT_DET_T1)) {return lcd_goto_previous_menu();}
     }
-    defer_return_to_status = true;
-    ENCODER_DIRECTION_NORMAL();
-    if (encoderPosition) {
-      refresh_cmd_timeout();
 
-      // Limit to software endstops, if enabled
-      float min = Z_PROBE_OFFSET_RANGE_MIN,
-            max = Z_PROBE_OFFSET_RANGE_MAX;
+    void tool_offset_set() {
+      if (lcd_clicked) {           
+        (void)settings.save();
+        lcd_goto_screen(lcd_offset_park);
+        enqueue_and_echo_commands_P(PSTR("G1 Z4"));
+        enqueue_and_echo_commands_P(PSTR("T3")); 
+      }
+      defer_return_to_status = true;
+      ENCODER_DIRECTION_NORMAL();
+      if (encoderPosition) {
+        refresh_cmd_timeout();
 
-      // Get the new position
-      current_position[Z_AXIS] -= float((int32_t)encoderPosition) * 0.05;
-      zprobe_zoffset -= float((int32_t)encoderPosition) * 0.05;
+        // Get the new position
+        current_position[Z_AXIS] -= float((int32_t)encoderPosition) * 0.05;
+        hotend_offset[Z_AXIS][1] += float((int32_t)encoderPosition) * 0.05;
 
-      // Limit only when trying to move towards the limit
-      if ((int32_t)encoderPosition < 0) NOLESS(zprobe_zoffset, min);
-      if ((int32_t)encoderPosition > 0) NOMORE(zprobe_zoffset, max);
+        manual_move_to_current(Z_AXIS);
 
-      manual_move_to_current(Z_AXIS);
-
-      encoderPosition = 0;
+        encoderPosition = 0;
+        lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
+      }
+      if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("T1 Z offset"), ftostr52sign(hotend_offset[Z_AXIS][1]));
       lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
     }
-    if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Z Offset"), ftostr52sign(zprobe_zoffset));
-  }
 
-  void tool_offset_set() {
-    if (lcd_clicked) {
-      enqueue_and_echo_commands_P(PSTR("G91 \n G1 Z3 \n G90"));    
-      (void)settings.save();
-      return lcd_goto_previous_menu(); 
+    void lcd_offset_tool1() {
+      if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Tool Change T1"), NULL);
+      lcdDrawUpdate = LCDVIEW_CALL_NO_REDRAW;
+      if(!READ(HEAD_DET_T1)) lcd_goto_screen(tool_offset_set);
     }
-    defer_return_to_status = true;
-    ENCODER_DIRECTION_NORMAL();
-    if (encoderPosition) {
-      refresh_cmd_timeout();
 
-      // Get the new position
-      current_position[Z_AXIS] -= float((int32_t)encoderPosition) * 0.05;
-      hotend_offset[Z_AXIS][1] += float((int32_t)encoderPosition) * 0.05;
+    void probe_set() {
+      if (lcd_clicked) {
+        (void)settings.save();
+        lcd_goto_screen(lcd_offset_tool1);
+        enqueue_and_echo_commands_P(PSTR("G92 Z0"));
+        enqueue_and_echo_commands_P(PSTR("G1 Z4"));
+        enqueue_and_echo_commands_P(PSTR("T1"));
+        enqueue_and_echo_commands_P(PSTR("G1 X150 Y150 Z0"));
+      }
+      defer_return_to_status = true;
+      ENCODER_DIRECTION_NORMAL();
+      if (encoderPosition) {
+        refresh_cmd_timeout();
 
-      manual_move_to_current(Z_AXIS);
+        // Limit to software endstops, if enabled
+        float min = Z_PROBE_OFFSET_RANGE_MIN,
+              max = Z_PROBE_OFFSET_RANGE_MAX;
 
-      encoderPosition = 0;
+        // Get the new position
+        current_position[Z_AXIS] -= float((int32_t)encoderPosition) * 0.05;
+        zprobe_zoffset -= float((int32_t)encoderPosition) * 0.05;
+
+        // Limit only when trying to move towards the limit
+        if ((int32_t)encoderPosition < 0) NOLESS(zprobe_zoffset, min);
+        if ((int32_t)encoderPosition > 0) NOMORE(zprobe_zoffset, max);
+
+        manual_move_to_current(Z_AXIS);
+
+        encoderPosition = 0;
+        lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
+      }
+      if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Z Offset"), ftostr52sign(zprobe_zoffset));
       lcdDrawUpdate = LCDVIEW_REDRAW_NOW;
     }
-    if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("T1 Z offset"), ftostr52sign(hotend_offset[Z_AXIS][1]));
-  }
 
-  void offset_manager(){
-    START_SCREEN();
-    STATIC_ITEM("prepare..",false,false);
-    
-    enqueue_and_echo_commands_P(PSTR("M851 Z-13"));
-    enqueue_and_echo_commands_P(PSTR("M218 T1 Z-2"));
-    enqueue_and_echo_commands_P(PSTR("G28"));
-    enqueue_and_echo_commands_P(PSTR("T0"));
-    enqueue_and_echo_commands_P(PSTR("G1 X150 Y150 Z0"));
-    stepper.synchronize();
-    probe_set();
-  }
+    void lcd_offset_tool0() {
+      if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Tool Change T0"), NULL);
+      lcdDrawUpdate = LCDVIEW_CALL_NO_REDRAW;
+      if(!READ(HEAD_DET_T0)) lcd_goto_screen(probe_set);
+    }
+
+    /**
+     * Step 3: Display "Homing XYZ" - Wait for homing to finish
+     */
+    void lcd_offset_homing() {
+      if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR(MSG_LEVEL_BED_HOMING), NULL);
+      lcdDrawUpdate = LCDVIEW_CALL_NO_REDRAW;
+      if (axis_homed[X_AXIS] && axis_homed[Y_AXIS] && axis_homed[Z_AXIS])
+        lcd_goto_screen(lcd_offset_tool0);
+      enqueue_and_echo_commands_P(PSTR("T0"));
+      enqueue_and_echo_commands_P(PSTR("G1 X150 Y150 Z0"));
+    }
+
+    /**
+     * Step 2: Continue Bed Leveling...
+     */
+    void lcd_offset_continue() {
+      defer_return_to_status = true;
+      axis_homed[X_AXIS] = axis_homed[Y_AXIS] = axis_homed[Z_AXIS] = false;
+      lcd_goto_screen(lcd_offset_homing);
+      enqueue_and_echo_commands_P(PSTR("M851 Z-13"));
+      enqueue_and_echo_commands_P(PSTR("M218 T1 Z-2"));
+      enqueue_and_echo_commands_P(PSTR("G28"));
+    }
 
 
   #if HAS_LCD_CONTRAST
@@ -3002,12 +3046,10 @@ void kill_screen(const char* lcd_msg) {
   void lcd_control_menu() {
     START_MENU();
     MENU_BACK(MSG_MAIN);    
-    MENU_ITEM(function, "Z Offset manager", offset_manager);
-    MENU_ITEM(submenu, "adjust Z Offset", probe_set);
-    MENU_ITEM(submenu, "adjust T1 Z Offset", tool_offset_set);
+    MENU_ITEM(submenu, "Set Z Offset(T0,T1)", lcd_offset_continue);
     MENU_ITEM(submenu, MSG_TEMPERATURE, lcd_control_temperature_menu);
     MENU_ITEM(submenu, MSG_MOTION, lcd_control_motion_menu);
-    MENU_ITEM(submenu, MSG_FILAMENT, lcd_control_filament_menu);
+    //MENU_ITEM(submenu, MSG_FILAMENT, lcd_control_filament_menu);
 
     #if HAS_LCD_CONTRAST
       MENU_ITEM_EDIT_CALLBACK(int3, MSG_CONTRAST, (int*)&lcd_contrast, LCD_CONTRAST_MIN, LCD_CONTRAST_MAX, lcd_callback_set_contrast, true);
@@ -3028,9 +3070,9 @@ void kill_screen(const char* lcd_msg) {
 
     #if ENABLED(EEPROM_SETTINGS)
       MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
-      MENU_ITEM(function, MSG_LOAD_EEPROM, lcd_load_settings);
+      //MENU_ITEM(function, MSG_LOAD_EEPROM, lcd_load_settings);
     #endif
-    MENU_ITEM(function, MSG_RESTORE_FAILSAFE, lcd_factory_settings);
+    //MENU_ITEM(function, MSG_RESTORE_FAILSAFE, lcd_factory_settings);
     #if ENABLED(EEPROM_SETTINGS)
       MENU_ITEM(gcode, MSG_INIT_EEPROM, PSTR("M502\nM500")); // TODO: Add "Are You Sure?" step
     #endif
@@ -3118,6 +3160,69 @@ void kill_screen(const char* lcd_msg) {
 
   #endif // PIDTEMP
 
+  void lcd_control_pid_settings_menu() {
+    START_MENU();
+    MENU_BACK(MSG_TEMPERATURE);
+
+    //
+    // PID-P, PID-I, PID-D, PID-C, PID Autotune
+    // PID-P E1, PID-I E1, PID-D E1, PID-C E1, PID Autotune E1
+    // PID-P E2, PID-I E2, PID-D E2, PID-C E2, PID Autotune E2
+    // PID-P E3, PID-I E3, PID-D E3, PID-C E3, PID Autotune E3
+    // PID-P E4, PID-I E4, PID-D E4, PID-C E4, PID Autotune E4
+    // PID-P E5, PID-I E5, PID-D E5, PID-C E5, PID Autotune E5
+    //
+    #if ENABLED(PIDTEMP)
+
+      #define _PID_BASE_MENU_ITEMS(ELABEL, eindex) \
+        raw_Ki = unscalePID_i(PID_PARAM(Ki, eindex)); \
+        raw_Kd = unscalePID_d(PID_PARAM(Kd, eindex)); \
+        MENU_ITEM_EDIT(float52, MSG_PID_P ELABEL, &PID_PARAM(Kp, eindex), 1, 9990); \
+        MENU_ITEM_EDIT_CALLBACK(float52, MSG_PID_I ELABEL, &raw_Ki, 0.01, 9990, copy_and_scalePID_i_E ## eindex); \
+        MENU_ITEM_EDIT_CALLBACK(float52, MSG_PID_D ELABEL, &raw_Kd, 1, 9990, copy_and_scalePID_d_E ## eindex)
+
+      #if ENABLED(PID_EXTRUSION_SCALING)
+        #define _PID_MENU_ITEMS(ELABEL, eindex) \
+          _PID_BASE_MENU_ITEMS(ELABEL, eindex); \
+          MENU_ITEM_EDIT(float3, MSG_PID_C ELABEL, &PID_PARAM(Kc, eindex), 1, 9990)
+      #else
+        #define _PID_MENU_ITEMS(ELABEL, eindex) _PID_BASE_MENU_ITEMS(ELABEL, eindex)
+      #endif
+/*
+      #if ENABLED(PID_AUTOTUNE_MENU)
+        #define PID_MENU_ITEMS(ELABEL, eindex) \
+          _PID_MENU_ITEMS(ELABEL, eindex); \
+          MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_PID_AUTOTUNE ELABEL, &autotune_temp[eindex], 150, heater_maxtemp[eindex] - 15, lcd_autotune_callback_E ## eindex)
+      #else
+        #define PID_MENU_ITEMS(ELABEL, eindex) _PID_MENU_ITEMS(ELABEL, eindex)
+      #endif
+*/
+      #define PID_MENU_ITEMS(ELABEL, eindex) _PID_MENU_ITEMS(ELABEL, eindex)
+
+      #if ENABLED(PID_PARAMS_PER_HOTEND) && HOTENDS > 1
+        PID_MENU_ITEMS(" " MSG_E1, 0);
+        PID_MENU_ITEMS(" " MSG_E2, 1);
+        #if HOTENDS > 2
+          PID_MENU_ITEMS(" " MSG_E3, 2);
+          #if HOTENDS > 3
+            PID_MENU_ITEMS(" " MSG_E4, 3);
+            #if HOTENDS > 4
+              PID_MENU_ITEMS(" " MSG_E5, 4);
+            #endif // HOTENDS > 4
+          #endif // HOTENDS > 3
+        #endif // HOTENDS > 2
+      #else // !PID_PARAMS_PER_HOTEND || HOTENDS == 1
+        PID_MENU_ITEMS("", 0);
+      #endif // !PID_PARAMS_PER_HOTEND || HOTENDS == 1
+
+    #endif // PIDTEMP
+
+    MENU_ITEM(gcode, "PID Autotune T0", PSTR("M303 U1 E0"));
+    MENU_ITEM(gcode, "PID Autotune T1", PSTR("M303 U1 E1"));
+    MENU_ITEM(gcode, "PID Autotune BED", PSTR("M303 U1 E-1"));
+    END_MENU();
+  }
+
   /**
    *
    * "Control" > "Temperature" submenu
@@ -3188,56 +3293,7 @@ void kill_screen(const char* lcd_msg) {
       MENU_ITEM_EDIT(float32, MSG_FACTOR, &planner.autotemp_factor, 0.0, 1.0);
     #endif
 
-    //
-    // PID-P, PID-I, PID-D, PID-C, PID Autotune
-    // PID-P E1, PID-I E1, PID-D E1, PID-C E1, PID Autotune E1
-    // PID-P E2, PID-I E2, PID-D E2, PID-C E2, PID Autotune E2
-    // PID-P E3, PID-I E3, PID-D E3, PID-C E3, PID Autotune E3
-    // PID-P E4, PID-I E4, PID-D E4, PID-C E4, PID Autotune E4
-    // PID-P E5, PID-I E5, PID-D E5, PID-C E5, PID Autotune E5
-    //
-    #if ENABLED(PIDTEMP)
-
-      #define _PID_BASE_MENU_ITEMS(ELABEL, eindex) \
-        raw_Ki = unscalePID_i(PID_PARAM(Ki, eindex)); \
-        raw_Kd = unscalePID_d(PID_PARAM(Kd, eindex)); \
-        MENU_ITEM_EDIT(float52, MSG_PID_P ELABEL, &PID_PARAM(Kp, eindex), 1, 9990); \
-        MENU_ITEM_EDIT_CALLBACK(float52, MSG_PID_I ELABEL, &raw_Ki, 0.01, 9990, copy_and_scalePID_i_E ## eindex); \
-        MENU_ITEM_EDIT_CALLBACK(float52, MSG_PID_D ELABEL, &raw_Kd, 1, 9990, copy_and_scalePID_d_E ## eindex)
-
-      #if ENABLED(PID_EXTRUSION_SCALING)
-        #define _PID_MENU_ITEMS(ELABEL, eindex) \
-          _PID_BASE_MENU_ITEMS(ELABEL, eindex); \
-          MENU_ITEM_EDIT(float3, MSG_PID_C ELABEL, &PID_PARAM(Kc, eindex), 1, 9990)
-      #else
-        #define _PID_MENU_ITEMS(ELABEL, eindex) _PID_BASE_MENU_ITEMS(ELABEL, eindex)
-      #endif
-
-      #if ENABLED(PID_AUTOTUNE_MENU)
-        #define PID_MENU_ITEMS(ELABEL, eindex) \
-          _PID_MENU_ITEMS(ELABEL, eindex); \
-          MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_PID_AUTOTUNE ELABEL, &autotune_temp[eindex], 150, heater_maxtemp[eindex] - 15, lcd_autotune_callback_E ## eindex)
-      #else
-        #define PID_MENU_ITEMS(ELABEL, eindex) _PID_MENU_ITEMS(ELABEL, eindex)
-      #endif
-
-      #if ENABLED(PID_PARAMS_PER_HOTEND) && HOTENDS > 1
-        PID_MENU_ITEMS(" " MSG_E1, 0);
-        PID_MENU_ITEMS(" " MSG_E2, 1);
-        #if HOTENDS > 2
-          PID_MENU_ITEMS(" " MSG_E3, 2);
-          #if HOTENDS > 3
-            PID_MENU_ITEMS(" " MSG_E4, 3);
-            #if HOTENDS > 4
-              PID_MENU_ITEMS(" " MSG_E5, 4);
-            #endif // HOTENDS > 4
-          #endif // HOTENDS > 3
-        #endif // HOTENDS > 2
-      #else // !PID_PARAMS_PER_HOTEND || HOTENDS == 1
-        PID_MENU_ITEMS("", 0);
-      #endif // !PID_PARAMS_PER_HOTEND || HOTENDS == 1
-
-    #endif // PIDTEMP
+    MENU_ITEM(submenu, "PID Settings", lcd_control_pid_settings_menu);
 
     //
     // Preheat Material 1 conf
@@ -3373,7 +3429,7 @@ void kill_screen(const char* lcd_msg) {
 
     // M205 T Min Travel Feedrate
     MENU_ITEM_EDIT(float3, MSG_VTRAV_MIN, &planner.min_travel_feedrate_mm_s, 0, 999);
-
+    MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
     END_MENU();
   }
 
@@ -3412,7 +3468,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_E, &planner.max_acceleration_mm_per_s2[E_AXIS], 100, 99000, _reset_acceleration_rates);
     #endif
-
+    MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
     END_MENU();
   }
 
@@ -3429,7 +3485,18 @@ void kill_screen(const char* lcd_msg) {
       MENU_ITEM_EDIT(float52, MSG_VZ_JERK, &planner.max_jerk[Z_AXIS], 0.1, 990);
     #endif
     MENU_ITEM_EDIT(float3, MSG_VE_JERK, &planner.max_jerk[E_AXIS], 1, 990);
+    MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
+    END_MENU();
+  }
 
+  void lcd_control_motion_offset_menu() {
+    START_MENU();
+    MENU_BACK(MSG_MOTION);
+    MENU_ITEM_EDIT(float52, MSG_ZPROBE_ZOFFSET, &zprobe_zoffset, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX);
+    MENU_ITEM_EDIT(float32, "Tool Offset X", &hotend_offset[X_AXIS][1] , -5, 5);
+    MENU_ITEM_EDIT(float32, "Tool Offset Y", &hotend_offset[Y_AXIS][1] , -5, 5);
+    MENU_ITEM_EDIT(float32, "Tool Offset Z", &hotend_offset[Z_AXIS][1] , -5, 5);
+    MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
     END_MENU();
   }
 
@@ -3458,19 +3525,22 @@ void kill_screen(const char* lcd_msg) {
     #else
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float62, MSG_ESTEPS, &planner.axis_steps_per_mm[E_AXIS], 5, 9999, _planner_refresh_positioning);
     #endif
-
+    MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
     END_MENU();
   }
 
   void lcd_control_motion_menu() {
     START_MENU();
     MENU_BACK(MSG_CONTROL);
-
+/*
     #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
       MENU_ITEM(submenu, MSG_ZPROBE_ZOFFSET, lcd_babystep_zoffset);
     #elif HAS_BED_PROBE
-      MENU_ITEM_EDIT_CALLBACK(float32, MSG_ZPROBE_ZOFFSET, &zprobe_zoffset, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX, lcd_refresh_zprobe_zoffset);
+      MENU_ITEM_EDIT_CALLBACK(float52, MSG_ZPROBE_ZOFFSET, &zprobe_zoffset, Z_PROBE_OFFSET_RANGE_MIN, Z_PROBE_OFFSET_RANGE_MAX, lcd_refresh_zprobe_zoffset);
     #endif
+*/
+    // OFFSET
+    MENU_ITEM(submenu, "Tool Offset", lcd_control_motion_offset_menu);
 
     // M203 / M205 - Feedrate items
     MENU_ITEM(submenu, MSG_VELOCITY, lcd_control_motion_velocity_menu);
@@ -3488,6 +3558,8 @@ void kill_screen(const char* lcd_msg) {
     #if ENABLED(ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED)
       MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &stepper.abort_on_endstop_hit);
     #endif
+
+    MENU_ITEM(function, MSG_STORE_EEPROM, lcd_store_settings);
 
     END_MENU();
   }
@@ -3810,9 +3882,9 @@ void kill_screen(const char* lcd_msg) {
 
     void lcd_advanced_pause_toocold_menu() {
       START_MENU();
-      STATIC_ITEM(MSG_HEATING_FAILED_LCD, true, true);
-      STATIC_ITEM(MSG_FILAMENT_CHANGE_MINTEMP STRINGIFY(EXTRUDE_MINTEMP) ".", false, false);
       MENU_BACK(MSG_BACK);
+      STATIC_ITEM(MSG_HEATING_FAILED_LCD, true, true);
+      STATIC_ITEM(MSG_FILAMENT_CHANGE_MINTEMP STRINGIFY(EXTRUDE_MINTEMP) ".", false, false);      
       #if LCD_HEIGHT > 4
         STATIC_ITEM(" ");
       #endif
@@ -3822,6 +3894,7 @@ void kill_screen(const char* lcd_msg) {
 
     void lcd_advanced_pause_resume_print() {
       advanced_pause_menu_response = ADVANCED_PAUSE_RESPONSE_RESUME_PRINT;
+      if (!planner.movesplanned() || !IS_SD_PRINTING) enqueue_and_echo_commands_P(PSTR("T3"));
     }
 
     void lcd_advanced_pause_extrude_more() {
