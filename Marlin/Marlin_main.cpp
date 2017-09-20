@@ -6205,6 +6205,8 @@ inline void gcode_M17() {
     if (z_lift > 0)
       do_blocking_move_to_z(current_position[Z_AXIS] + z_lift, PAUSE_PARK_Z_FEEDRATE);
 
+    tool_change(active_extruder);
+
     // Move XY axes to filament exchange position
     do_blocking_move_to_xy(x_pos, y_pos, PAUSE_PARK_XY_FEEDRATE);
 
@@ -9683,8 +9685,16 @@ inline void gcode_M502() {
 
     #if ENABLED(HOME_BEFORE_FILAMENT_CHANGE)
       // Don't allow filament change without homing first
-      if (axis_unhomed_error()) home_all_axes();
+        if (axis_homed[X_AXIS] == false || axis_homed[Y_AXIS] == false || axis_known_position[X_AXIS] == false || axis_known_position[Y_AXIS] == false){
+        SERIAL_ECHOLNPGM("homing before tool change");
+        setup_for_endstop_or_probe_move();
+        do_blocking_move_to_z(current_position[Z_AXIS]+15);
+        HOMEAXIS(Y);
+        HOMEAXIS(X);
+        }
     #endif
+
+    if(active_extruder == 2 || active_extruder == 3) active_extruder=0;
 
     // Initial retract before move to filament change position
     const float retract = parser.seen('E') ? parser.value_axis_units(E_AXIS) : 0
