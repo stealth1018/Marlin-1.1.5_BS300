@@ -4090,6 +4090,8 @@ inline void gcode_G28(const bool always_home_all) {
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) SERIAL_ECHOLNPGM("<<< gcode_G28");
   #endif
+  setup_for_endstop_or_probe_move();
+  endstops.enable(true);
 } // G28
 
 void home_all_axes() { gcode_G28(true); }
@@ -5242,6 +5244,9 @@ void home_all_axes() { gcode_G28(true); }
 
     if (planner.abl_enabled)
       SYNC_PLAN_POSITION_KINEMATIC();
+
+    setup_for_endstop_or_probe_move();
+    endstops.enable(true);
 
     tool_change(3, 0, true);
   }
@@ -9688,6 +9693,7 @@ inline void gcode_M502() {
         if (axis_homed[X_AXIS] == false || axis_homed[Y_AXIS] == false || axis_known_position[X_AXIS] == false || axis_known_position[Y_AXIS] == false){
         SERIAL_ECHOLNPGM("homing before tool change");
         setup_for_endstop_or_probe_move();
+        endstops.enable(true);
         do_blocking_move_to_z(current_position[Z_AXIS]+15);
         HOMEAXIS(Y);
         HOMEAXIS(X);
@@ -10408,6 +10414,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
         if (axis_homed[X_AXIS] == false || axis_homed[Y_AXIS] == false || axis_known_position[X_AXIS] == false || axis_known_position[Y_AXIS] == false){
         SERIAL_ECHOLNPGM("homing before tool change");
         setup_for_endstop_or_probe_move();
+        endstops.enable(true);
         do_blocking_move_to_z(current_position[Z_AXIS]+15);
         HOMEAXIS(Y);
         HOMEAXIS(X);
