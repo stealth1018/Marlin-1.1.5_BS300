@@ -13730,7 +13730,7 @@ void loop() {
   if (commands_in_queue) {
 
     #if ENABLED(SDSUPPORT)
-
+/*
       if (card.saving) {
         char* command = command_queue[cmd_queue_index_r];
         if (strstr_P(command, PSTR("M29"))) {
@@ -13749,6 +13749,7 @@ void loop() {
         }
       }
       else
+*/
         process_next_command();
 
     #else
