@@ -746,6 +746,7 @@ void kill_screen(const char* lcd_msg) {
       wait_for_heatup = false;
       lcd_setstatusPGM(PSTR(MSG_PRINT_ABORTED), -1);
       lcd_return_to_status();
+      enqueue_and_echo_commands_P(PSTR("T3"));
     }
 
   #endif // SDSUPPORT
@@ -2498,8 +2499,8 @@ void kill_screen(const char* lcd_msg) {
     //
     // Tool Change
     //
-    MENU_ITEM(gcode, "Tool Change T0", PSTR("T0"));
-    MENU_ITEM(gcode, "Tool Change T1", PSTR("T1"));
+    //MENU_ITEM(gcode, "Tool Change T0", PSTR("T0"));
+    //MENU_ITEM(gcode, "Tool Change T1", PSTR("T1"));
     MENU_ITEM(gcode, "Parking All Head", PSTR("T3"));
 
     //
