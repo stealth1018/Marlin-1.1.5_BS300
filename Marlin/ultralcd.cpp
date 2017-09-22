@@ -1126,7 +1126,6 @@ void kill_screen(const char* lcd_msg) {
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
 
     void lcd_enqueue_filament_change() {
-      if(active_extruder == 2 || active_extruder == 3) active_extruder=0;
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         if (!DEBUGGING(DRYRUN) && !thermalManager.allow_cold_extrude &&
             thermalManager.degTargetHotend(active_extruder) < thermalManager.extrude_min_temp) {
@@ -1141,7 +1140,7 @@ void kill_screen(const char* lcd_msg) {
     }
 
     void lcd_enqueue_filament_change_t0() {
-      enqueue_and_echo_commands_P(PSTR("T0"));
+      active_extruder=0;
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         if (!DEBUGGING(DRYRUN) && !thermalManager.allow_cold_extrude &&
             thermalManager.degTargetHotend(active_extruder) < thermalManager.extrude_min_temp) {
@@ -1156,7 +1155,7 @@ void kill_screen(const char* lcd_msg) {
     }
 
     void lcd_enqueue_filament_change_t1() {
-      enqueue_and_echo_commands_P(PSTR("T1"));
+      active_extruder=1;
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         if (!DEBUGGING(DRYRUN) && !thermalManager.allow_cold_extrude &&
             thermalManager.degTargetHotend(active_extruder) < thermalManager.extrude_min_temp) {
@@ -3856,7 +3855,9 @@ void kill_screen(const char* lcd_msg) {
       START_SCREEN();
       STATIC_ITEM(MSG_MARLIN, true, true);                             // Marlin
       STATIC_ITEM(SHORT_BUILD_VERSION, true);                          // x.x.x-Branch
-      STATIC_ITEM(STRING_DISTRIBUTION_DATE, true);                     // YYYY-MM-DD HH:MM
+      STATIC_ITEM(__DATE__, true);
+      //STATIC_ITEM("Compiled" ": " __DATE__, true);      
+      //STATIC_ITEM(STRING_DISTRIBUTION_DATE, true);                     // YYYY-MM-DD HH:MM
       STATIC_ITEM(MACHINE_NAME, true);                                 // My3DPrinter
       STATIC_ITEM(WEBSITE_URL, true);                                  // www.my3dprinter.com
       STATIC_ITEM(MSG_INFO_EXTRUDERS ": " STRINGIFY(EXTRUDERS), true); // Extruders: 2
