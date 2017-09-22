@@ -3951,22 +3951,9 @@ void kill_screen(const char* lcd_msg) {
       START_SCREEN();
       STATIC_ITEM(MSG_FILAMENT_CHANGE_HEADER, true, true);
       STATIC_ITEM(MSG_FILAMENT_CHANGE_INIT_1);
-      #ifdef MSG_FILAMENT_CHANGE_INIT_2
-        STATIC_ITEM(MSG_FILAMENT_CHANGE_INIT_2);
-        #define __FC_LINES_A 3
-      #else
-        #define __FC_LINES_A 2
-      #endif
-      #ifdef MSG_FILAMENT_CHANGE_INIT_3
-        STATIC_ITEM(MSG_FILAMENT_CHANGE_INIT_3);
-        #define _FC_LINES_A (__FC_LINES_A + 1)
-      #else
-        #define _FC_LINES_A __FC_LINES_A
-      #endif
-      #if LCD_HEIGHT > _FC_LINES_A + 1
-        STATIC_ITEM(" ");
-      #endif
-      HOTEND_STATUS_ITEM();
+      STATIC_ITEM(MSG_FILAMENT_CHANGE_INIT_2);
+      STATIC_ITEM(MSG_FILAMENT_CHANGE_INIT_3);
+      STATIC_ITEM(" ");
       END_SCREEN();
     }
 
