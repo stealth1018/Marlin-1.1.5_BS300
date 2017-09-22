@@ -6162,6 +6162,8 @@ inline void gcode_M17() {
   ) {
     if (move_away_flag) return false; // already paused
 
+    if(active_extruder == 2 || active_extruder == 3) active_extruder=0;
+
     if (!DEBUGGING(DRYRUN) && (unload_length != 0 || retract != 0)) {
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         if (!thermalManager.allow_cold_extrude &&

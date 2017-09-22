@@ -1125,7 +1125,7 @@ void kill_screen(const char* lcd_msg) {
   #if ENABLED(ADVANCED_PAUSE_FEATURE)
 
     void lcd_enqueue_filament_change() {
-
+      if(active_extruder == 2 || active_extruder == 3) active_extruder=0;
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         if (!DEBUGGING(DRYRUN) && !thermalManager.allow_cold_extrude &&
             thermalManager.degTargetHotend(active_extruder) < thermalManager.extrude_min_temp) {
@@ -1138,6 +1138,38 @@ void kill_screen(const char* lcd_msg) {
       lcd_advanced_pause_show_message(ADVANCED_PAUSE_MESSAGE_INIT);
       enqueue_and_echo_commands_P(PSTR("M600 B0"));
     }
+
+    void lcd_enqueue_filament_change_t0() {
+      enqueue_and_echo_commands_P(PSTR("T0"));
+      #if ENABLED(PREVENT_COLD_EXTRUSION)
+        if (!DEBUGGING(DRYRUN) && !thermalManager.allow_cold_extrude &&
+            thermalManager.degTargetHotend(active_extruder) < thermalManager.extrude_min_temp) {
+          lcd_save_previous_screen();
+          lcd_goto_screen(lcd_advanced_pause_toocold_menu);
+          return;
+        }
+      #endif
+
+      lcd_advanced_pause_show_message(ADVANCED_PAUSE_MESSAGE_INIT);
+      enqueue_and_echo_commands_P(PSTR("M600 B0"));
+    }
+
+    void lcd_enqueue_filament_change_t1() {
+      enqueue_and_echo_commands_P(PSTR("T1"));
+      #if ENABLED(PREVENT_COLD_EXTRUSION)
+        if (!DEBUGGING(DRYRUN) && !thermalManager.allow_cold_extrude &&
+            thermalManager.degTargetHotend(active_extruder) < thermalManager.extrude_min_temp) {
+          lcd_save_previous_screen();
+          lcd_goto_screen(lcd_advanced_pause_toocold_menu);
+          return;
+        }
+      #endif
+
+      lcd_advanced_pause_show_message(ADVANCED_PAUSE_MESSAGE_INIT);
+      enqueue_and_echo_commands_P(PSTR("M600 B0"));
+    }
+
+
 
   #endif // ADVANCED_PAUSE_FEATURE
 
@@ -2475,7 +2507,9 @@ void kill_screen(const char* lcd_msg) {
     //
     #if ENABLED(ADVANCED_PAUSE_FEATURE)
       //if (!thermalManager.tooColdToExtrude(active_extruder) && !IS_SD_FILE_OPEN)
-        MENU_ITEM(function, MSG_FILAMENTCHANGE, lcd_enqueue_filament_change);
+        //MENU_ITEM(function, MSG_FILAMENTCHANGE, lcd_enqueue_filament_change);
+        MENU_ITEM(function, "Change filament T0", lcd_enqueue_filament_change_t0);
+        MENU_ITEM(function, "Change filament T1", lcd_enqueue_filament_change_t1);
     #endif
 
     //
@@ -3217,9 +3251,9 @@ void kill_screen(const char* lcd_msg) {
 
     #endif // PIDTEMP
 
-    MENU_ITEM(gcode, "PID Autotune T0", PSTR("M303 U1 E0"));
-    MENU_ITEM(gcode, "PID Autotune T1", PSTR("M303 U1 E1"));
-    MENU_ITEM(gcode, "PID Autotune BED", PSTR("M303 U1 E-1"));
+    //MENU_ITEM(gcode, "PID Autotune T0", PSTR("M303 U1 E0"));
+    //MENU_ITEM(gcode, "PID Autotune T1", PSTR("M303 U1 E1"));
+    //MENU_ITEM(gcode, "PID Autotune BED", PSTR("M303 U1 E-1"));
     END_MENU();
   }
 
