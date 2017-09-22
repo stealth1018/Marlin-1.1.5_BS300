@@ -1259,7 +1259,7 @@ inline void get_serial_commands() {
             #else
               safe_delay(1000);
             #endif
-            set_led_color(0, 0, 0);   // OFF
+            set_led_color(0, 255, 0);   // OFF
           #endif
           card.checkautostart(true);
         }
@@ -7611,16 +7611,12 @@ inline void gcode_M109() {
     const float temp = thermalManager.degHotend(target_extruder);
 
     #if ENABLED(PRINTER_EVENT_LEDS)
-      // Gradually change LED strip from violet to red as nozzle heats up
+      // Gradually change LED strip from green to yellow as nozzle heats up
       if (!wants_to_cool) {
-        const uint8_t blue = map(constrain(temp, start_temp, target_temp), start_temp, target_temp, 255, 0);
+        const uint8_t blue = map(constrain(temp, start_temp, target_temp), start_temp, target_temp, 0, 255);
         if (blue != old_blue) {
           old_blue = blue;
-          set_led_color(255, 0, blue
-            #if ENABLED(NEOPIXEL_RGBW_LED)
-              , 0, true
-            #endif
-          );
+          set_led_color(255, blue, 0);
         }
       }
     #endif
@@ -7659,7 +7655,7 @@ inline void gcode_M109() {
       #if ENABLED(RGBW_LED) || ENABLED(NEOPIXEL_RGBW_LED)
         set_led_color(0, 0, 0, 255);  // Turn on the WHITE LED
       #else
-        set_led_color(255, 255, 255); // Set LEDs All On
+        set_led_color(255, 255, 0); // Set LEDs All On
       #endif
     #endif
   }
@@ -7756,11 +7752,7 @@ inline void gcode_M109() {
           const uint8_t red = map(constrain(temp, start_temp, target_temp), start_temp, target_temp, 0, 255);
           if (red != old_red) {
             old_red = red;
-            set_led_color(red, 0, 255
-              #if ENABLED(NEOPIXEL_RGBW_LED)
-                , 0, true
-              #endif
-            );
+            set_led_color(255, red, 0);
           }
         }
       #endif
@@ -10567,15 +10559,15 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
   if(active_extruder == 0)
   if(READ(MOUNT_DET_T0))
-    kill(PSTR("TOOL CHANGE ERROR T0-M"));
+    kill(PSTR("TOOL CHANGE ERR T0-M"));
 
   if(active_extruder == 1)
   if(READ(MOUNT_DET_T1))
-    kill(PSTR("TOOL CHANGE ERROR T1-M"));
+    kill(PSTR("TOOL CHANGE ERR T1-M"));
 
   if(active_extruder == 2)
   if(READ(MOUNT_DET_PROBE))
-    kill(PSTR("TOOL CHANGE ERROR P-M"));
+    kill(PSTR("TOOL CHANGE ERR P-M"));
 
     if(tmp_extruder == 0){
       SERIAL_ECHOLNPGM("take t0");
@@ -10607,15 +10599,15 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
     if(tmp_extruder == 0)
     if(READ(HEAD_DET_T0))
-      kill(PSTR("TOOL CHANGE ERROR T0-H"));
+      kill(PSTR("TOOL CHANGE ERR T0-H"));
 
     if(tmp_extruder == 1)
     if(READ(HEAD_DET_T1))
-      kill(PSTR("TOOL CHANGE ERROR T1-H"));
+      kill(PSTR("TOOL CHANGE ERR T1-H"));
 
     if(tmp_extruder == 2)
     if(READ(HEAD_DET_PROBE))
-      kill(PSTR("TOOL CHANGE ERROR P-H"));
+      kill(PSTR("TOOL CHANGE ERR P-H"));
 
     do_blocking_move_to_z(current_position[Z_AXIS]-2);
 
@@ -13412,6 +13404,7 @@ void idle(
  * After this the machine will need to be reset.
  */
 void kill(const char* lcd_msg) {
+  set_led_color(255,0,0);
   SERIAL_ERROR_START();
   SERIAL_ERRORLNPGM(MSG_ERR_KILLED);
 
@@ -13486,6 +13479,8 @@ void stop() {
  *    • status LEDs
  */
 void setup() {
+
+  set_led_color(0,255,0);
 
   #if ENABLED(MAX7219_DEBUG)
     Max7219_init();
