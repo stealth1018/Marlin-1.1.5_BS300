@@ -6225,6 +6225,12 @@ inline void gcode_M17() {
         #endif
       }
 
+      // load filament
+      set_destination_to_current();
+      destination[E_AXIS] += 3;
+      RUNPLAN(ADVANCED_PAUSE_EXTRUDE_FEEDRATE);
+      stepper.synchronize();
+
       // Unload filament
       set_destination_to_current();
       destination[E_AXIS] += unload_length;
