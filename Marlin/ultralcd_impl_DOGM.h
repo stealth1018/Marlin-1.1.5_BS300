@@ -258,7 +258,7 @@ void lcd_printPGM_utf(const char *str, uint8_t n=LCD_WIDTH) {
   char c;
   while (n && (c = pgm_read_byte(str))) n -= charset_mapper(c), ++str;
 }
-
+/*
 #if ENABLED(SHOW_BOOTSCREEN)
 
   #if ENABLED(SHOW_CUSTOM_BOOTSCREEN)
@@ -307,6 +307,20 @@ void lcd_printPGM_utf(const char *str, uint8_t n=LCD_WIDTH) {
   }
 
 #endif // SHOW_BOOTSCREEN
+*/
+void lcd_bootscreen() {
+  static bool show_bootscreen = true;
+      if (show_bootscreen) {
+        show_bootscreen = false;
+        u8g.firstPage();
+        do {
+          u8g.drawBitmapP(
+            (128 - (START_BMPWIDTH))  /2,
+            ( 64 - (START_BMPHEIGHT)) /2,
+            CEILING(START_BMPWIDTH, 8), START_BMPHEIGHT, start_bmp);
+        } while (u8g.nextPage());
+      }
+}
 
 // Initialize or re-initialize the LCD
 static void lcd_implementation_init() {
