@@ -1023,7 +1023,7 @@ void kill_screen(const char* lcd_msg) {
           }
         }
         if (lcdDrawUpdate)
-          lcd_implementation_drawedit(PSTR(MSG_ZPROBE_ZOFFSET), ftostr43sign(zprobe_zoffset));
+          lcd_implementation_drawedit(PSTR(MSG_ZPROBE_ZOFFSET), ftostr52sign(zprobe_zoffset));
       }
 
     #else // !BABYSTEP_ZPROBE_OFFSET
@@ -2942,7 +2942,7 @@ void kill_screen(const char* lcd_msg) {
     else
       MENU_ITEM(gcode, MSG_AUTO_HOME, PSTR("G28"));
 
-    MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_get_e_amount);
+    //MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_get_e_amount);
     #if E_MANUAL > 1
       MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E1, lcd_move_get_e0_amount);
       MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E2, lcd_move_get_e1_amount);
