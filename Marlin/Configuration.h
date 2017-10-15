@@ -525,7 +525,12 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
+#ifdef USE_SPU80
+// for James Kang's test machine (smaller pulley?)
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80.00, 80.00, 400, 418.5 }
+#else
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 78.74, 78.74, 400, 418.5 }
+#endif
 
 /**
  * Default Max Feed Rate (mm/s)

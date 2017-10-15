@@ -20,6 +20,9 @@
  *
  */
 
+#ifndef __PINS_BS300_H__
+#define __PINS_BS300_H__
+
 /**
  * BS300 BOARD pin assignments
  */
@@ -40,7 +43,7 @@
 #define Z_MIN_PIN		34
 #define Z_MAX_PIN		43
 
-#define FIL_RUNOUT_PIN  26 //E0
+//#define FIL_RUNOUT_PIN  26 //E0 // 엄청난 warning 들의 원인 임시로 제거. (이름을 바꿔야 할 듯, 추후 정리 예정)
 #define FIL_RUNOUT_PIN	54 //E1
 
 //
@@ -126,3 +129,6 @@
 #define BTN_EN1            38
 #define BTN_EN2            36
 #define BTN_ENC            35
+
+#endif // __PINS_BS300_H__
+

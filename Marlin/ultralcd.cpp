@@ -2965,18 +2965,26 @@ void kill_screen(const char* lcd_msg) {
    * "Control" submenu
    *
    */
+   static bool delayed_commands = false;
+
     void lcd_offset_park() {
       if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Tool Parking"), NULL);
       lcdDrawUpdate = LCDVIEW_CALL_NO_REDRAW;
       if(!READ(MOUNT_DET_T1)) {return lcd_goto_previous_menu();}
+
+	  if (delayed_commands) {
+        enqueue_and_echo_commands_P(PSTR("G1 Z4"));
+        enqueue_and_echo_commands_P(PSTR("T3")); 
+		delayed_commands = false;
+	  }
     }
 
     void tool_offset_set() {
       if (lcd_clicked) {           
         (void)settings.save();
+		delayed_commands = true;
         lcd_goto_screen(lcd_offset_park);
-        enqueue_and_echo_commands_P(PSTR("G1 Z4"));
-        enqueue_and_echo_commands_P(PSTR("T3")); 
+		return;
       }
       defer_return_to_status = true;
       ENCODER_DIRECTION_NORMAL();
@@ -3000,16 +3008,22 @@ void kill_screen(const char* lcd_msg) {
       if (lcdDrawUpdate) lcd_implementation_drawedit(PSTR("Tool Change T1"), NULL);
       lcdDrawUpdate = LCDVIEW_CALL_NO_REDRAW;
       if(!READ(HEAD_DET_T1)) lcd_goto_screen(tool_offset_set);
+
+	  if (delayed_commands) {
+		enqueue_and_echo_commands_P(PSTR("G92 Z0"));
+		enqueue_and_echo_commands_P(PSTR("G1 Z4"));
+		enqueue_and_echo_commands_P(PSTR("T1"));
+		enqueue_and_echo_commands_P(PSTR("G1 X150 Y150 Z0"));
+		delayed_commands = false;
+	  }
     }
 
     void probe_set() {
       if (lcd_clicked) {
         (void)settings.save();
+		delayed_commands = true;
         lcd_goto_screen(lcd_offset_tool1);
-        enqueue_and_echo_commands_P(PSTR("G92 Z0"));
-        enqueue_and_echo_commands_P(PSTR("G1 Z4"));
-        enqueue_and_echo_commands_P(PSTR("T1"));
-        enqueue_and_echo_commands_P(PSTR("G1 X150 Y150 Z0"));
+		return;
       }
       defer_return_to_status = true;
       ENCODER_DIRECTION_NORMAL();
@@ -3077,6 +3091,11 @@ void kill_screen(const char* lcd_msg) {
     lcd_completion_feedback();
   }
 
+#define _____________________________6
+#define _____________________________7
+#define _____________________________8
+#define _____________________________9
+#define _____________________________0
   void lcd_control_menu() {
     START_MENU();
     MENU_BACK(MSG_MAIN);    
