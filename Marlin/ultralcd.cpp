@@ -3270,9 +3270,9 @@ void kill_screen(const char* lcd_msg) {
 
     #endif // PIDTEMP
 
-    //MENU_ITEM(gcode, "PID Autotune T0", PSTR("M303 U1 E0"));
-    //MENU_ITEM(gcode, "PID Autotune T1", PSTR("M303 U1 E1"));
-    //MENU_ITEM(gcode, "PID Autotune BED", PSTR("M303 U1 E-1"));
+    MENU_ITEM(gcode, "PID Autotune T0", PSTR("M303 U1 E0"));
+    MENU_ITEM(gcode, "PID Autotune T1", PSTR("M303 U1 E1"));
+    MENU_ITEM(gcode, "PID Autotune BED", PSTR("M303 U1 E-1"));
     END_MENU();
   }
 
