@@ -10565,15 +10565,15 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
   if(active_extruder == 0)
   if(READ(MOUNT_DET_T0))
-    kill(PSTR("TOOL CHANGE ERROR T0-M"));
+    kill(PSTR("Toolchange Err T0-M"));
 
   if(active_extruder == 1)
   if(READ(MOUNT_DET_T1))
-    kill(PSTR("TOOL CHANGE ERROR T1-M"));
+    kill(PSTR("Toolchange Err T1-M"));
 
   if(active_extruder == 2)
   if(READ(MOUNT_DET_PROBE))
-    kill(PSTR("TOOL CHANGE ERROR P-M"));
+    kill(PSTR("Toolchange Err P-M"));
 
     if(tmp_extruder == 0){
       SERIAL_ECHOLNPGM("take t0");
@@ -10605,15 +10605,15 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
     if(tmp_extruder == 0)
     if(READ(HEAD_DET_T0))
-      kill(PSTR("TOOL CHANGE ERROR T0-H"));
+      kill(PSTR("Toolchange Err T0-H"));
 
     if(tmp_extruder == 1)
     if(READ(HEAD_DET_T1))
-      kill(PSTR("TOOL CHANGE ERROR T1-H"));
+      kill(PSTR("Toolchange Err T1-H"));
 
     if(tmp_extruder == 2)
     if(READ(HEAD_DET_PROBE))
-      kill(PSTR("TOOL CHANGE ERROR P-H"));
+      kill(PSTR("Toolchange Err P-H"));
 
     do_blocking_move_to_z(current_position[Z_AXIS]-2);
 
